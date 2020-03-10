@@ -256,7 +256,7 @@ else{
                     </div>
                     <div class="formRow">
                         <label>昵称:<span class="req">*</span></label>
-                        <div class="formRight"><input type="text" class="validate[required,minSize[6]]" name="userAlice" id="minValid"/></div><div class="clear"></div>
+                        <div class="formRight"><input type="text" class="validate[required]" name="userAlice" id="minValid"/></div><div class="clear"></div>
                     </div>
                     <div class="formRow">
                         <label>邮箱:<span class="req">*</span></label>
@@ -265,8 +265,8 @@ else{
                     <div class="formRow">
                         <label>性别:<span class="req">*</span></label>
                         <div class="formRight">
-                            <div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" id="radioReq1" name="userSex" value="0" checked="checked" data-prompt-position="topRight:102" /><label for="radioReq1">男</label></div>
-                        	<div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" id="radioReq2" name="userSex" value="1" data-prompt-position="topRight:102" /><label for="radioReq2">女</label></div>
+                            <div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" id="radioReq1" name="userSex" value="男" checked="checked" data-prompt-position="topRight:102" /><label for="radioReq1">男</label></div>
+                        	<div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" id="radioReq2" name="userSex" value="女" data-prompt-position="topRight:102" /><label for="radioReq2">女</label></div>
                         </div><div class="clear"></div>
                     </div>
                     <div class="formSubmit" style="float: left; margin-left: 500px;"><input type="submit" value="注册" class="redB" onclick="regist()"/></div>
