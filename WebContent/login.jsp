@@ -95,8 +95,8 @@
                 </div>
                 
                 <div class="loginControl" >
-                    <a href="${pageContext.request.contextPath}/register.jsp"><input type="submit" value="登录" class="dredB logMeIn" style="float:left;margin: 0px 0px 10px 60px;"/></a>
-                    <input type="submit" value="注册" class="dredB logMeIn" style="margin:0px 60px 10px 0px;" />
+                    <input type="submit" value="登录" class="dredB logMeIn" style="float:left;margin: 0px 0px 10px 60px;"/>
+                    <a href="${pageContext.request.contextPath}/register.jsp"><input type="button" value="注册" class="dredB logMeIn" style="margin:0px 60px 10px 0px;" /></a>
                     <a href="#" style="float:left;margin: 0px 0px 0px 260px;">忘记密码</a>
                 </div>
                 

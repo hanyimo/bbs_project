@@ -9,14 +9,14 @@ public class BBSUser {
 	private String userEmail;	//邮箱
 	private String userSex;		//性别	
 	private String userPhoto;	//头像
-	private double userScore;	//积分
+	private Double userScore;	//积分
 	private Integer userLevel;	//等级
 	private Date levelDown;		//降级日期
 	private Date userLock;		//锁定日期
 	private Date userCreateDate;	//创建日期
 	public BBSUser() {}
 	public BBSUser(String userId, String userPsw, String userAlice, String userEmail, String userSex, String userPhoto,
-			double userScore, Integer userLevel, Date levelDown, Date userLock, Date userCreateDate) {
+			Double userScore, Integer userLevel, Date levelDown, Date userLock, Date userCreateDate) {
 		this.userId = userId;
 		this.userPsw = userPsw;
 		this.userAlice = userAlice;
@@ -65,10 +65,10 @@ public class BBSUser {
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
 	}
-	public double getUserScore() {
+	public Double getUserScore() {
 		return userScore;
 	}
-	public void setUserScore(double userScore) {
+	public void setUserScore(Double userScore) {
 		this.userScore = userScore;
 	}
 	public Integer getUserLevel() {
