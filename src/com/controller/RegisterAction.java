@@ -10,17 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import com.pojo.BBSUser;
-import com.service.BBSService;
+
+import com.pojo.User;
+import com.service.UserService;
 
 @WebServlet("/register")
-public class RegisterController extends HttpServlet {
+public class RegisterAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private BBSService  bbsService= new BBSService();
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	request.setCharacterEncoding("utf-8");
+	// 创建一个UserService对象
+	private UserService userService = new UserService();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		// 获取数据
+		// 接收数据
 		String userId = request.getParameter("userId");
 		String userPsw = request.getParameter("userPsw");
 		String userAlice = request.getParameter("userAlice");
@@ -28,25 +30,22 @@ public class RegisterController extends HttpServlet {
 		String userSex = request.getParameter("userSex");
 		// 加密密码
 		userPsw = DigestUtils.md5Hex(userPsw);
-		BBSUser user = new BBSUser(userId,userPsw,userAlice,userEmail,userSex,
-						null,null,null,null,null,new Date());
-		//判断姓名是否重复
-		if(bbsService.findUserId(userId) != null) {
-			request.setAttribute("error", "该用户名已存在！");
-			request.getRequestDispatcher("register.jsp").forward(request, response);
-			return;
-		}else {
-			//添加数据进数据库
-			bbsService.addUser(user);
-			request.setAttribute("error", "注册成功！");
-			//跳转回注册页面
+		// System.out.println(userPsw);
+		User user = new User(userId,userPsw,userAlice,userEmail,userSex,
+				null,null,null,null,null,new Date());
+		// 验证账户是否存在数据库中
+		if(userService.findUser(userId) != null) {
+			request.setAttribute("message","账户已经存在");
 			request.getRequestDispatcher("register.jsp").forward(request, response);
 			return;
 		}
+		// 把账户存入数据库中
+		userService.addUser(user);
+		request.setAttribute("message","注册新用户成功");
+		request.getRequestDispatcher("register.jsp").forward(request, response);
+		return;
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

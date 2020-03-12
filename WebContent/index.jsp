@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-<title>注册</title>
+<title>论坛首页</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -16,6 +17,10 @@
 <script src="${pageContext.request.contextPath}/static/js/jquery-ui.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/excanvas.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.orderBars.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.pie.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.resize.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.sparkline.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/forms/uniform.js"></script>
@@ -57,6 +62,8 @@
 
 <script src="${pageContext.request.contextPath}/static/js/custom.js"></script>
 
+<script src="${pageContext.request.contextPath}/static/js/charts/chart.js"></script>
+
 <!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  --></head>
 
 <body>
@@ -64,21 +71,11 @@
 <!-- Left side content -->
 <%@ include file="user_left_side.jsp" %>
 
-
 <!-- Right side -->
 <div id="rightSide">
 
     <!-- Top fixed navigation -->
-    <div class="topNav">
-        <div class="wrapper">
-            <div class="userNav">
-                <ul>
-                    <li><a href="${pageContext.request.contextPath}/index.jsp" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>回到首页</span></a></li>
-                </ul>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
+    <%@ include file="user_top_nav.jsp" %>
     
     <!-- Responsive header -->
     <div class="resp">
@@ -88,7 +85,7 @@
         
         <div class="cLine"></div>
         <div class="smalldd">
-            <span class="goTo"><img src="${pageContext.request.contextPath}/static/images/icons/light/alert.png" alt="" />Validation engine</span>
+            <span class="goTo"><img src="${pageContext.request.contextPath}/static/images/icons/light/home.png" alt="" />Dashboard</span>
             <ul class="smallDropdown">
                 <li><a href="index.html" title=""><img src="${pageContext.request.contextPath}/static/images/icons/light/home.png" alt="" />Dashboard</a></li>
                 <li><a href="charts.html" title=""><img src="${pageContext.request.contextPath}/static/images/icons/light/stats.png" alt="" />Statistics and charts</a></li>
@@ -135,51 +132,97 @@
             </ul>
         </div>
         <div class="cLine"></div>
-    </div><br/><br/>
+    </div><br><br>
     
     <!-- Main content wrapper -->
     <div class="wrapper">
-        
-        <!-- Validation form -->
-        <form id="validate" class="form" method="post" action="${pageContext.request.contextPath}/register">
-        	<fieldset>
-                <div class="widget">
-                    <div class="title" style="color:red;"><img src="${pageContext.request.contextPath}/static/images/icons/dark/alert.png" alt="" class="titleIcon" /><h6 style="color:red;">${empty message?'请注册':message}</h6></div>
-                    <div class="formRow">
-                        <label>账户:<span class="req">*</span></label>
-                        <div class="formRight"><input type="text" class="validate[required]" name="userId" id="req"/></div><div class="clear"></div>
-                    </div>
-                    <div class="formRow">
-                        <label>密码:<span class="req">*</span></label>
-                        <div class="formRight"><input type="password" class="validate[required]" name="userPsw" id="password1" /></div><div class="clear"></div>
-                    </div>
-                    <div class="formRow">
-                        <label>确认密码:<span class="req">*</span></label>
-                        <div class="formRight"><input type="password" class="validate[required,equals[password1]]" name="rePassword" id="password2" /></div><div class="clear"></div>
-                    </div>
-                    <div class="formRow">
-                        <label>昵称:<span class="req">*</span></label>
-                        <div class="formRight"><input type="text" class="validate[required]" name="userAlice" id="minValid"/></div><div class="clear"></div>
-                    </div>
-                    <div class="formRow">
-                        <label>邮箱:<span class="req">*</span></label>
-                        <div class="formRight"><input type="text" value="" class="validate[required,custom[email]]" name="userEmail" id="emailValid"/></div><div class="clear"></div>
-                    </div>
-                    <div class="formRow">
-                        <label>性别:<span class="req">*</span></label>
-                        <div class="formRight">
-                            <div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" value="男" id="radioReq1" name="userSex" checked="checked" data-prompt-position="topRight:102" /><label for="radioReq1">男</label></div>
-                        	<div class="floatL" style="margin: 2px 0 0 0;"><input type="radio" value="女" id="radioReq2" name="userSex" data-prompt-position="topRight:102" /><label for="radioReq2">女</label></div>
-                        </div><div class="clear"></div>
-                    </div>
-                    <div class="formSubmit"><input type="submit" value="注册" class="redB" /></div>
-                    
-                    <div class="clear"></div>
-                </div>
-                
-            </fieldset>
-        </form>       
-        
+        <!-- Media table -->
+        <div class="widget">
+            <div class="title"><span class="titleIcon"><input type="checkbox" id="titleCheck" name="titleCheck" /></span><h6>全选</h6></div>
+            <table cellpadding="0" cellspacing="0" width="100%" class="sTable withCheck mTable" id="checkAll">
+                <thead>
+                    <tr>
+                        <td><img src="${pageContext.request.contextPath}/static/images/icons/tableArrows.png" alt="" /></td>
+                        <td>Image</td>
+                        <td class="sortCol"><div>Description<span></span></div></td>
+                        <td class="sortCol"><div>Date<span></span></div></td>
+                        <td>File info</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div class="itemActions">
+                                <label>Apply action:</label>
+                                <select>
+                                    <option value="">Select action...</option>
+                                    <option value="Edit">Edit</option>
+                                    <option value="Delete">Delete</option>
+                                    <option value="Move">Move somewhere</option>
+                                </select>
+                            </div>
+                            <div class="tPagination">
+                                <ul>
+                                    <li class="prev"><a href="#" title=""></a></li>
+                                    <li><a href="#" title="">1</a></li>
+                                    <li><a href="#" title="">2</a></li>
+                                    <li><a href="#" title="">3</a></li>
+                                    <li><a href="#" title="">4</a></li>
+                                    <li><a href="#" title="">5</a></li>
+                                    <li><a href="#" title="">6</a></li>
+                                    <li>...</li>
+                                    <li><a href="#" title="">20</a></li>
+                                    <li class="next"><a href="#" title=""></a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" id="titleCheck2" name="checkRow" /></td>
+                        <td align="center"><a href="${pageContext.request.contextPath}/static/images/big.png" title="" rel="lightbox"><img src="${pageContext.request.contextPath}/static/images/user.png" alt="" /></a></td>
+                        <td><a href="#" title="">Image1 description</a></td>
+                        <td align="center">Feb 12, 2012. 12:28</td>
+                        <td class="fileInfo"><span><strong>Size:</strong> 215 Kb</span><span><strong>Format:</strong> .jpg</span></td>
+                        <td class="actBtns"><a href="#" title="Update" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/edit.png" alt="" /></a><a href="#" title="Remove" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/remove.png" alt="" /></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="titleCheck3" name="checkRow" /></td>
+                        <td align="center"><a href="${pageContext.request.contextPath}/static/images/big.png" title="" rel="lightbox"><img src="${pageContext.request.contextPath}/static/images/user.png" alt="" /></a></td>
+                        <td><a href="#" title="">Image2 description</a></td>
+                        <td align="center">Feb 12, 2012. 12:30</td>
+                        <td class="fileInfo"><span><strong>Size:</strong> 215 Kb</span><span><strong>Format:</strong> .jpg</span></td>
+                        <td class="actBtns"><a href="#" title="Update" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/edit.png" alt="" /></a><a href="#" title="Remove" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/remove.png" alt="" /></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="titleCheck4" name="checkRow" /></td>
+                        <td align="center"><a href="${pageContext.request.contextPath}/static/images/big.png" title="" rel="lightbox"><img src="${pageContext.request.contextPath}/static/images/user.png" alt="" /></a></td>
+                        <td><a href="#" title="">Image3 description</a></td>
+                        <td align="center">Feb 11, 2012. 02:30</td>
+                        <td class="fileInfo"><span><strong>Size:</strong> 215 Kb</span><span><strong>Format:</strong> .jpg</span></td>
+                        <td class="actBtns"><a href="#" title="Update" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/edit.png" alt="" /></a><a href="#" title="Remove" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/remove.png" alt="" /></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="titleCheck5" name="checkRow" /></td>
+                        <td align="center"><a href="${pageContext.request.contextPath}/static/images/big.png" title="" rel="lightbox"><img src="${pageContext.request.contextPath}/static/images/user.png" alt="" /></a></td>
+                        <td><a href="#" title="">Image4 description</a></td>
+                        <td align="center">Feb 12, 2012. 12:28</td>
+                        <td class="fileInfo"><span><strong>Size:</strong> 215 Kb</span><span><strong>Format:</strong> .jpg</span></td>
+                        <td class="actBtns"><a href="#" title="Update" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/edit.png" alt="" /></a><a href="#" title="Remove" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/remove.png" alt="" /></a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="titleCheck6" name="checkRow" /></td>
+                        <td align="center"><a href="${pageContext.request.contextPath}/static/images/big.png" title="" rel="lightbox"><img src="${pageContext.request.contextPath}/static/images/user.png" alt="" /></a></td>
+                        <td><a href="#" title="">Image5 description</a></td>
+                        <td align="center">Feb 12, 2012. 12:28</td>
+                        <td class="fileInfo"><span><strong>Size:</strong> 215 Kb</span><span><strong>Format:</strong> .jpg</span></td>
+                        <td class="actBtns"><a href="#" title="Update" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/edit.png" alt="" /></a><a href="#" title="Remove" class="tipS"><img src="${pageContext.request.contextPath}/static/images/icons/remove.png" alt="" /></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     
     <!-- Footer line -->

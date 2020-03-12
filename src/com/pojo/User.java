@@ -2,21 +2,22 @@ package com.pojo;
 
 import java.util.Date;
 
-public class BBSUser {
-	private String userId; 		//账户名
-	private String userPsw;		//密码
-	private String userAlice;	//昵称
-	private String userEmail;	//邮箱
-	private String userSex;		//性别	
-	private String userPhoto;	//头像
-	private Double userScore;	//积分
-	private Integer userLevel;	//等级
-	private Date levelDown;		//降级日期
-	private Date userLock;		//锁定日期
-	private Date userCreateDate;	//创建日期
-	public BBSUser() {}
-	public BBSUser(String userId, String userPsw, String userAlice, String userEmail, String userSex, String userPhoto,
+public class User {
+	private String userId;
+	private String userPsw;
+	private String userAlice;
+	private String userEmail;
+	private String userSex;
+	private String userPhoto;
+	private Double userScore;
+	private Integer userLevel;
+	private Date levelDown;
+	private Date userLock;
+	private Date userCreateDate;
+	public User() {}
+	public User(String userId, String userPsw, String userAlice, String userEmail, String userSex, String userPhoto,
 			Double userScore, Integer userLevel, Date levelDown, Date userLock, Date userCreateDate) {
+		super();
 		this.userId = userId;
 		this.userPsw = userPsw;
 		this.userAlice = userAlice;
@@ -28,6 +29,13 @@ public class BBSUser {
 		this.levelDown = levelDown;
 		this.userLock = userLock;
 		this.userCreateDate = userCreateDate;
+	}
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userPsw=" + userPsw + ", userAlice=" + userAlice + ", userEmail="
+				+ userEmail + ", userSex=" + userSex + ", userPhoto=" + userPhoto + ", userScore=" + userScore
+				+ ", userLevel=" + userLevel + ", levelDown=" + levelDown + ", userLock=" + userLock
+				+ ", userCreateDate=" + userCreateDate + "]";
 	}
 	public String getUserId() {
 		return userId;
@@ -95,5 +103,14 @@ public class BBSUser {
 	public void setUserCreateDate(Date userCreateDate) {
 		this.userCreateDate = userCreateDate;
 	}
-	
 }
+
+
+
+
+
+
+
+
+
+
