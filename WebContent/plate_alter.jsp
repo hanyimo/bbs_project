@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-<title>管理员页面</title>
+<title>板块管理</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -70,6 +70,28 @@
 
 	<%@ include file="admin_top_nav.jsp" %>
     
+    <!-- Form -->
+	<form action="${pageContext.request.contextPath}/alter_plate" class="form" method="post">
+		<input name="plateId" value="${param.plateId }" type="hidden"/>
+		<fieldset>
+			<div class="widget">
+ 				<div class="title"><img src="${pageContext.request.contextPath}/static/images/icons/dark/list.png" alt="" class="titleIcon" /><h6>修改版块</h6></div>
+  				<div class="formRow">
+					<label>版块标题:</label>
+					<div class="formRight"><input type="text" name="plateTitle" value="${param.plateTitle }" required="required"/></div>
+       				<div class="clear"></div>
+   				</div>
+   				<div class="formRow">
+     				<label>版块描述:</label>
+              		<div class="formRight"><textarea rows="8" cols="" name="plateMessage" required="required">${param.plateMessage }</textarea></div>
+           			<div class="clear"></div>
+        		</div>
+    			<div class="formSubmit"><input type="submit" value="确定修改" class="redB" /></div>
+       			<div class="clear"></div>
+   			</div>
+   		</fieldset>
+   	</form>
+    
     <!-- Footer line -->
     <div id="footer">
         <div class="wrapper">&nbsp;</div>
@@ -78,7 +100,6 @@
 </div>
 
 <div class="clear"></div>
-
 </body>
 </html>
 

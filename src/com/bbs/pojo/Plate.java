@@ -1,5 +1,4 @@
-package com.pojo;
-
+package com.bbs.pojo;
 
 public class Plate {
 	private Integer plateId;
@@ -8,7 +7,6 @@ public class Plate {
 	private Integer isEnable;
 	public Plate() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Plate(Integer plateId, String plateTitle, String plateMessage, Integer isEnable) {
 		super();
@@ -41,15 +39,4 @@ public class Plate {
 	public void setIsEnable(Integer isEnable) {
 		this.isEnable = isEnable;
 	}
-	
 }
-
-
-
-
-
-
-
-
-
-

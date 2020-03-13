@@ -135,7 +135,7 @@
             </ul>
         </div>
         <div class="cLine"></div>
-    </div><br/><br/>
+    </div>
     
     <!-- Main content wrapper -->
     <div class="wrapper">

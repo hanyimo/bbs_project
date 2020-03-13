@@ -1,10 +1,7 @@
-package com.service;
+package com.bbs.service;
 
-import java.util.ArrayList;
-
-import com.dao.UserDao;
-import com.pojo.Plate;
-import com.pojo.User;
+import com.bbs.dao.UserDao;
+import com.bbs.pojo.User;
 
 public class UserService {
 	// 创建UserDao对象
@@ -33,21 +30,5 @@ public class UserService {
 	 */
 	public User findUserByIdAndPsw(String userId,String userPsw) {
 		return userDao.findUserByIdAndPsw(userId, userPsw);
-	}
-	
-	/**
-	 * 添加板块到数据库
-	 * @param plate
-	 * @return 1-成功 0-失败
-	 */
-	public int addPlate(Plate plate) {
-		return userDao.addPlate(plate);
-	}
-	/**
-	 * 查询出所有的板块信息
-	 * @return
-	 */
-	public ArrayList<Plate> listPlate(){
-		return userDao.listPlate();
 	}
 }
