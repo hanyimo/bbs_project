@@ -3,6 +3,7 @@ package com.bbs.service;
 import java.util.List;
 
 import com.bbs.dao.ManageDao;
+import com.bbs.pojo.Invitation;
 import com.bbs.pojo.Plate;
 
 public class ManageService {
@@ -38,5 +39,13 @@ public class ManageService {
 	 */
 	public int alterPlate(Plate plate) {
 		return manageDao.alterPlate(plate);
+	}
+	/**
+	 * 添加新的帖子
+	 * @param invitation
+	 * @return @return 成功返回1 失败返回0
+	 */
+	public int addInvitation(Invitation invitation) {
+		return manageDao.addInvitation(invitation);
 	}
 }

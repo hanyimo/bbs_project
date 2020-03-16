@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.bbs.pojo.Invitation;
 import com.bbs.pojo.Plate;
 import com.bbs.tools.BaseDao;
 
@@ -110,6 +112,33 @@ public class ManageDao {
 			e.printStackTrace();
 		} finally {
 			BaseDao.close(con, ps, null);
+		}
+		return 0;
+	}
+	/**
+	 * 添加新的帖子
+	 * @param invitation
+	 * @return @return 成功返回1 失败返回0
+	 */
+	public int addInvitation(Invitation invitation) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = BaseDao.getCon();
+			String sql = "insert into bbs_invitation(invitationId,invitationTitle, invitationMessage,"
+					+ "userId,plateId,categoryId,isPass,isEnable,isCream,invitationCreate,"
+					+ "invitationModify) values(?,?,?,?,?,?,?,?,?,?,?)";
+			ps = con.prepareStatement(sql);
+			BaseDao.update(ps,new Object[] {invitation.getInvitationId(),invitation.getInvitationTitle(),
+					invitation.getInvitationMessage(),invitation.getUserId(),invitation.getPlateId()
+					,invitation.getCategoryId(),invitation.getIsPass(),invitation.getIsEnable(),
+					invitation.getIsCream(),invitation.getInvitationCreate(),invitation.getInvitationModify()});
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			BaseDao.close(con, ps, rs);
 		}
 		return 0;
 	}
