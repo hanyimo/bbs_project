@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>板块管理</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
@@ -115,7 +115,7 @@ $(function(){
 					+'<h6>'+msg.plateTitle+'</h6>'
 					+'<div class="textC" style="float:right;padding:3px 10px 3px 0px;">'
 					+'<a href="plate_alter.jsp?plateId='+msg.plateId+'&plateTitle='+msg.plateTitle+'&plateMessage='+msg.plateMessage+'" title="" class="button greenB" style="margin:0px 1px;"><span>修改版块</span></a>'
-					+'<a href="#" plateid="'+msg.plateId+'" onclick="deletePlate(this,event)" title="" class="button redB" style="margin:0px 1px;"><span>删除版块</span></a>'
+					+'<a href="#" plateid="'+msg.plateId+'" onclick="deletePlate(this,event)" title="" class="button redB"><span>删除版块</span></a>'
 					+'</div>'
 					+'<div class="clear"></div>'
 					+'</div>'
@@ -145,7 +145,7 @@ $(function(){
 					+'<h6>'+msg[item].plateTitle+'</h6>'
 					+'<div class="textC" style="float:right;padding:3px 10px 3px 0px;">'
 					+'<a href="plate_alter.jsp?plateId='+msg[item].plateId+'&plateTitle='+msg[item].plateTitle+'&plateMessage='+msg[item].plateMessage+'" title="" class="button greenB" style="margin:0px 1px;"><span>修改版块</span></a>'
-	 				+'<a href="#" plateid="'+msg[item].plateId+'" onclick="deletePlate(this,event)" title="" class="button redB" style="margin:0px 1px;"><span>删除版块</span></a>'
+	 				+'<a href="#" plateid="'+msg[item].plateId+'" onclick="deletePlate(this,event)" title="" class="button redB"><span>删除版块</span></a>'
 					+'</div>'
 					+'<div class="clear"></div>'
 					+'</div>'

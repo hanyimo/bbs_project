@@ -14,9 +14,10 @@ public class User {
 	private Date levelDown;
 	private Date userLock;
 	private Date userCreateDate;
+	private Integer isPass;
 	public User() {}
 	public User(String userId, String userPsw, String userAlice, String userEmail, String userSex, String userPhoto,
-			Double userScore, Integer userLevel, Date levelDown, Date userLock, Date userCreateDate) {
+			Double userScore, Integer userLevel, Date levelDown, Date userLock, Date userCreateDate, Integer isPass) {
 		super();
 		this.userId = userId;
 		this.userPsw = userPsw;
@@ -29,6 +30,7 @@ public class User {
 		this.levelDown = levelDown;
 		this.userLock = userLock;
 		this.userCreateDate = userCreateDate;
+		this.isPass = isPass;
 	}
 	@Override
 	public String toString() {
@@ -102,6 +104,12 @@ public class User {
 	}
 	public void setUserCreateDate(Date userCreateDate) {
 		this.userCreateDate = userCreateDate;
+	}
+	public Integer getIsPass() {
+		return isPass;
+	}
+	public void setIsPass(Integer isPass) {
+		this.isPass = isPass;
 	}
 }
 

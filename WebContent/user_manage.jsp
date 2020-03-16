@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>板块管理</title>
+<title>用户管理</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -70,27 +70,35 @@
 
 	<%@ include file="admin_top_nav.jsp" %>
     
-    <!-- Form -->
-	<form action="${pageContext.request.contextPath}/alter_plate" class="form" method="post">
-		<input name="plateId" value="${param.plateId }" type="hidden"/>
-		<fieldset>
-			<div class="widget">
- 				<div class="title"><img src="${pageContext.request.contextPath}/static/images/icons/dark/list.png" alt="" class="titleIcon" /><h6>修改版块</h6></div>
-  				<div class="formRow">
-					<label>版块标题:</label>
-					<div class="formRight"><input type="text" name="plateTitle" value="${param.plateTitle }" required="required"/></div>
-       				<div class="clear"></div>
-   				</div>
-   				<div class="formRow">
-     				<label>版块描述:</label>
-              		<div class="formRight"><textarea rows="8" cols="" name="plateMessage" required="required">${param.plateMessage }</textarea></div>
-           			<div class="clear"></div>
-        		</div>
-    			<div class="formSubmit"><input type="submit" value="确定修改" class="redB" /></div>
-       			<div class="clear"></div>
-   			</div>
-   		</fieldset>
-   	</form>
+	<!-- Dynamic table -->
+	<div class="widget">
+ 		<div class="title"><img src="images/icons/dark/full2.png" alt="" class="titleIcon" /><h6>用户管理</h6></div>                          
+		<table cellpadding="0" cellspacing="0" border="0" class="display dTable">
+            <thead>
+            <tr>
+            <th>账户</th>
+            <th>审核</th>
+            <th>降级</th>
+            <th>锁定</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="curUser" items="${users }">
+            	<tr class="gradeA">
+            	<td class="center">${curUser.userId }</td>
+            	<c:if test="${curUser.isPass == 0 }">
+            		<td class="center"><a href="${pageContext.request.contextPath}/admin_alter_user_pass?userId=${curUser.userId}">待审核</a></td>
+            	</c:if>
+            	<c:if test="${curUser.isPass != 0 }">
+            		<td class="center">已审核</td>
+            	</c:if>
+            	<td class="center">Win 95+</td>
+            	<td class="center">4</td>
+            </tr>
+            </c:forEach>
+            </tbody>
+   		</table>  
+	</div>
     
     <!-- Footer line -->
     <div id="footer">

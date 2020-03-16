@@ -32,7 +32,7 @@ public class RegisterAction extends HttpServlet {
 		userPsw = DigestUtils.md5Hex(userPsw);
 		// System.out.println(userPsw);
 		User user = new User(userId,userPsw,userAlice,userEmail,userSex,
-				null,null,null,null,null,new Date());
+				null,null,null,null,null,new Date(),0);
 		// 验证账户是否存在数据库中
 		if(userService.findUser(userId) != null) {
 			request.setAttribute("message","账户已经存在");
