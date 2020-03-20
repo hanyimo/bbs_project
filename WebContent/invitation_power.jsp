@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<c:if test="${empty user || user.isPass!=1 }">
-	<jsp:forward page="index.jsp" />
-</c:if>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>发帖</title>
+<title>管理员页面</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -20,10 +17,6 @@
 <script src="${pageContext.request.contextPath}/static/js/jquery-ui.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/excanvas.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.orderBars.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.pie.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.resize.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.sparkline.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/forms/uniform.js"></script>
@@ -65,64 +58,61 @@
 
 <script src="${pageContext.request.contextPath}/static/js/custom.js"></script>
 
-<script src="${pageContext.request.contextPath}/static/js/charts/chart.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/wangEditor.min.js"></script>
-
-<!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  -->
-<style>
-	.w-e-text-container{height: 300px !important;}
-</style>
-</head>
-
+<!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  --></head>
 
 <body>
 
 <!-- Left side content -->
-<%@ include file="user_left_side.jsp" %>
+<%@ include file="admin_left_side.jsp" %>
 
 <!-- Right side -->
 <div id="rightSide">
 
-    <!-- Top fixed navigation -->
-    <%@ include file="user_top_nav.jsp" %>
-    
-    <!-- Note -->
-	<div class="nNote nInformation hideit">
-		<p><strong>消息： </strong>${empty message?"请填写所有内容！":message }</p>
-	</div>
-    
-    <!-- Validation form -->
-	<form class="form" method="post" action="${pageContext.request.contextPath}/add_invitation">
+	<%@ include file="admin_top_nav.jsp" %>
+	
+	<!-- Validation form -->
+    <form id="validate" class="form" method="post" action="${pageContext.request.contextPath}/invitation_power_action">
+    	<input type="hidden" name="invitationId" value="${invitation.invitationId }" />
 		<fieldset>
 			<div class="widget">
+				<div class="title"><img src="images/icons/dark/alert.png" alt="" class="titleIcon" /><h6>帖子权限</h6></div>
 				<div class="formRow">
-            		<label>版块:<span class="req">*</span></label>
+					<label>帖子标题:<span class="req">*</span></label>
+     				<div class="formRight">
+     					<input type="text" readonly="readonly" value="${invitation.invitationTitle }"/>
+     				</div>
+     				<div class="clear"></div>
+  				</div>
+				<div class="formRow">
+    				<label>帖子内容:<span class="req">*</span></label>
+    				<div class="formRight">
+    					<!-- 内容 -->
+    					${invitation.invitationMessage }
+    				</div>
+    				<div class="clear"></div>
+				</div>
+				<div class="formRow">
+               		<label>权限设置:<span class="req">*</span></label>
           			<div class="formRight">
-          				<div class="floatL">
-           					<select name="plateId" class="validate[required]" >
-                    		<option value="">请选择版块</option>
-                    		<c:forEach items="${plates }" var="plate">
-                    			<option value="${plate.plateId }">${plate.plateTitle }</option>
-                    		</c:forEach>
-                     		</select>
-                 		</div>
-         			</div>
-         			<div class="clear"></div>
-            	</div>
-            	<div class="formRow">
-      				<label>标题<span class="req">*</span></label>
-          			<div class="formRight"><input type="text" class="validate[required]" name="invitationTitle"/></div><div class="clear"></div>
+          				<!-- 审核后就不会显示了 -->
+           				<c:if test="${invitation.isPass == 0 }">
+           					<div class="floatL">
+	           					<select name="isPass" id="selectReq" class="validate[required]" >
+                        		<option value="">审核结果</option>
+                           		<option value="1">通过</option>
+                           		<option value="2">不通过</option>
+                  				</select>
+               				</div>
+               			</c:if>
+         				<div class="floatL" style="margin: 2px 0 0 10px;"><input type="checkbox" id="isEnable" name="isEnable" data-prompt-position="topRight:102" /><label for="isEnable">是否屏蔽</label></div>
+        				<div class="floatL" style="margin: 2px 0 0 10px;"><input type="checkbox" id="isCream" name="isCream" data-prompt-position="topRight:102" /><label for="isCream">是否是精华帖</label></div>
+          			</div>
+                   	<div class="clear"></div>
         		</div>
-            	<div class="formRow">
- 					<label>内容<span class="req">*</span></label>
-        			<div id="editor" class="formRight w-e-text-container"></div>
-					<div class="clear"></div>
- 				</div>
- 				<div class="formSubmit"><input type="submit" value="发帖" class="redB" /></div>
-				<div class="clear"></div>
-			</div>
+  				<div class="formSubmit"><input type="submit" value="确定" class="redB" /></div>
+      			<div class="clear"></div>
+			</div>   
 		</fieldset>
-		<input type="hidden" name="invitationMessage" id="invitationMessage"/>
 	</form>
     
     <!-- Footer line -->
@@ -133,77 +123,8 @@
 </div>
 
 <div class="clear"></div>
-<script>
-	var E = window.wangEditor;
-	var editor = new E('#editor');
-	// 自定义菜单配置
-    editor.customConfig.menus = [
-        'head',// 标题
-        'bold',// 加粗
-        'fontSize',//字号
-        'fontName', //字体
-        'italic',//倾斜
-        'underline',//下划线
-        'strikeThrough',  // 删除线
-        'foreColor',  // 文字颜色
-        'backColor',  // 背景颜色
-        'justify',  // 对齐方式
-        'emoticon',  // 表情
-        'image',  // 插入图片
-        'undo',  // 撤销
-        'redo'  // 重复
-    ];
- 	// 自定义配置颜色（字体颜色、背景色）
-    editor.customConfig.colors = [
-        '#000000',
-        '#eeece0',
-        '#1c487f',
-        '#4d80bf',
-        '#c24f4a',
-        '#8baa4a',
-        '#7b5ba1',
-        '#46acc8',
-        '#f9963b'
-    ];
-    // 自定义字体
-    editor.customConfig.fontNames = [
-        '宋体',
-        '黑体',
-        '华文新魏',
-        '微软雅黑',
-        'Arial',
-        'Tahoma',
-        'Verdana'
-    ];
- 	// 关闭粘贴样式的过滤
-    editor.customConfig.pasteFilterStyle = true;
-    // 忽略粘贴内容中的图片
-    editor.customConfig.pasteIgnoreImg = true;
- 	// 上传图片到服务器
-    editor.customConfig.uploadImgServer = '${pageContext.request.contextPath}/upload';
- 	// 隐藏“网络图片”tab
-    editor.customConfig.showLinkImg = false;
- 	// 将图片大小限制为 2M
-    editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024;
-	// 限制一次最多上传 5 张图片
-	editor.customConfig.uploadImgMaxLength = 5;
- 	// 监听函数，可使用监听函数在上传图片的不同阶段做相应处理
- 	editor.customConfig.uploadImgHooks = {
-    	customInsert: function (insertImg, result, editor) {
-        	for(var i in result){
-        		insertImg('${pageContext.request.contextPath}/static/file/'+result[i]);
-        	}
-    	}
-    }
-	editor.create();
- // 下面的script用于处理提交 
- $(function(){
-	 $("form").submit(function(){
-		 // 把富文本框中的内容作为id为invitationMessage的值
-		 $("#invitationMessage").val(editor.txt.html());
-	 });
- });
-</script>
+
 </body>
 </html>
+
     

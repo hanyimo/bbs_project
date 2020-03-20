@@ -33,7 +33,7 @@ public class ManageService {
 		return manageDao.deltePlateById(plateId);
 	}
 	/**
-	 * 修改plate的Titleh和Message
+	 * 修改plate的Title和Message
 	 * @param plate
 	 * @return 1-成功 0-失败
 	 */
@@ -41,11 +41,26 @@ public class ManageService {
 		return manageDao.alterPlate(plate);
 	}
 	/**
-	 * 添加新的帖子
-	 * @param invitation
-	 * @return @return 成功返回1 失败返回0
+	 * 获取所有帖子的列表
+	 * @return 帖子列表
 	 */
-	public int addInvitation(Invitation invitation) {
-		return manageDao.addInvitation(invitation);
+	public List<Invitation> listiInvitations(){
+		return manageDao.listInvitations();
+	}
+	/**
+	 * 根据帖子id查询帖子
+	 * @param invitationId--帖子id
+	 * @return 成功返回找到的帖子对象，失败返回null
+	 */
+	public Invitation findInvitationById(String invitationId) {
+		return manageDao.findInvitationById(invitationId);
+	}
+	/**
+	 * 修改帖子的权限
+	 * @param invitation--帖子
+	 * @return 1-成功 0-失败
+	 */
+	public int alterInvitationPower(Invitation invitation) {
+		return manageDao.alterInvitationPower(invitation);
 	}
 }

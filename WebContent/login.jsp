@@ -66,7 +66,7 @@
     <div class="wrapper">
         <div class="userNav">
             <ul>
-                <li><a href="${pageContext.request.contextPath}/index.jsp" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/mainWebsite.png" alt="" /><span>回到首页</span></a></li>
+                <li><a href="${pageContext.request.contextPath}/index" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/mainWebsite.png" alt="" /><span>回到首页</span></a></li>
             </ul>
         </div>
         <div class="clear"></div>
@@ -79,7 +79,7 @@
     <div class="loginLogo"><img src="${pageContext.request.contextPath}/static/images/loginLogo.png" alt="" /></div>
     <div class="widget">
         <div class="title"><img src="${pageContext.request.contextPath}/static/images/icons/dark/files.png" alt="" class="titleIcon" /><h6 style="color:red;">${empty message?'请登录':message}</h6></div>
-        <form action="${pageContext.request.contextPath}/login" id="validate" class="form">
+        <form action="${pageContext.request.contextPath}/login" id="validate" class="form" method="post">
             <fieldset>
                 <div class="formRow">
                     <label for="login">账户:</label>

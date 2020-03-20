@@ -14,7 +14,7 @@
                     </c:if>
                     <li>
                     	<c:if test="${!empty user }">
-                    		<a href="${pageContext.request.contextPath}/user_logout?url=${pageContext.request.requestURI}" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>登出</span></a>
+                    		<a href="${pageContext.request.contextPath}/user_logout" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>登出</span></a>
                     	</c:if>
                     	<c:if test="${empty user }">
                     		<a href="${pageContext.request.contextPath}/login.jsp" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>请登录</span></a>

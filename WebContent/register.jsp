@@ -73,7 +73,7 @@
         <div class="wrapper">
             <div class="userNav">
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/index.jsp" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>回到首页</span></a></li>
+                    <li><a href="${pageContext.request.contextPath}/index" title=""><img src="${pageContext.request.contextPath}/static/images/icons/topnav/logout.png" alt="" /><span>回到首页</span></a></li>
                 </ul>
             </div>
             <div class="clear"></div>

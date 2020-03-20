@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<c:if test="${empty user || user.isPass!=1 }">
-	<jsp:forward page="index.jsp" />
-</c:if>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>发帖</title>
+<title>帖子浏览</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -20,10 +18,6 @@
 <script src="${pageContext.request.contextPath}/static/js/jquery-ui.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/excanvas.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.orderBars.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.pie.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.flot.resize.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/plugins/charts/jquery.sparkline.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/plugins/forms/uniform.js"></script>
@@ -64,16 +58,15 @@
 <script src="${pageContext.request.contextPath}/static/js/plugins/elfinder.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/static/js/custom.js"></script>
-
-<script src="${pageContext.request.contextPath}/static/js/charts/chart.js"></script>
 <script src="${pageContext.request.contextPath}/static/js/wangEditor.min.js"></script>
 
 <!-- Shared on MafiaShare.net  --><!-- Shared on MafiaShare.net  -->
 <style>
-	.w-e-text-container{height: 300px !important;}
+.w-e-text-container{
+    height: 140px !important;/*!important是重点，因为原div是行内样式设置的高度300px*/
+}
 </style>
 </head>
-
 
 <body>
 
@@ -83,46 +76,55 @@
 <!-- Right side -->
 <div id="rightSide">
 
-    <!-- Top fixed navigation -->
-    <%@ include file="user_top_nav.jsp" %>
-    
-    <!-- Note -->
-	<div class="nNote nInformation hideit">
-		<p><strong>消息： </strong>${empty message?"请填写所有内容！":message }</p>
-	</div>
-    
-    <!-- Validation form -->
-	<form class="form" method="post" action="${pageContext.request.contextPath}/add_invitation">
+	<%@ include file="user_top_nav.jsp" %>
+	<form id="validate" class="form" method="post" action="${pageContext.request.contextPath}/answer_invitation">
+		<input type="hidden" name="invitationId" value="${ui.invitationId}"/>
+		<input type="hidden" name="ansMessage" id="ansMessage"/>
 		<fieldset>
 			<div class="widget">
-				<div class="formRow">
-            		<label>版块:<span class="req">*</span></label>
-          			<div class="formRight">
-          				<div class="floatL">
-           					<select name="plateId" class="validate[required]" >
-                    		<option value="">请选择版块</option>
-                    		<c:forEach items="${plates }" var="plate">
-                    			<option value="${plate.plateId }">${plate.plateTitle }</option>
-                    		</c:forEach>
-                     		</select>
-                 		</div>
-         			</div>
-         			<div class="clear"></div>
-            	</div>
-            	<div class="formRow">
-      				<label>标题<span class="req">*</span></label>
-          			<div class="formRight"><input type="text" class="validate[required]" name="invitationTitle"/></div><div class="clear"></div>
-        		</div>
-            	<div class="formRow">
- 					<label>内容<span class="req">*</span></label>
-        			<div id="editor" class="formRight w-e-text-container"></div>
+				<!-- 帖子内容 -->
+				<div class="title"><h6>${ui.invitationTitle }</h6></div>
+ 				<div class="formRow">
+ 					<img style="width:40px;" src="${pageContext.request.contextPath}/static/file/${ui.userPhoto}" alt="" /><br/>
+					<label>${ui.userAlice }<br/>
+					<fmt:formatDate value="${ui.invitationCreate }" pattern="yyyy-MM-dd HH:mm:ss"/></label>
+					<div class="formRight">${ui.invitationMessage }</div>
 					<div class="clear"></div>
- 				</div>
- 				<div class="formSubmit"><input type="submit" value="发帖" class="redB" /></div>
+				</div>
+				<div class="clear" style="border-bottom: 20px solid #EEE;"></div>
+				<!-- 帖子回复 -->
+				<c:forEach items="${anss }" var="ans">
+				<div class="formRow">
+					<img style="width:40px;" src="${pageContext.request.contextPath}/static/file/${ans.userPhoto}" alt="" /><br/>
+					<label>${ans.userAlice }<br/>
+					<fmt:formatDate value="${ans.ansDate }" pattern="yyyy-MM-dd HH:mm:ss"/></label>
+					<div class="formRight">${ans.ansMessage }</div>
+					<div class="clear"></div>
+				</div>
 				<div class="clear"></div>
+				</c:forEach>
+				<!-- 回复(只有登录了才能回复) -->
+				<c:choose>
+					<c:when test="${empty user }">
+						<div class="formRow">
+							<label>&nbsp;</label>
+							<div class="formRight"><a href="login.jsp">登录后才能回复</a></div>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</c:when>
+					<c:otherwise>
+						<div class="formRow">
+							<label style="color:red;">${message }</label>
+							<div class="formRight" id="editor"></div>
+							<div class="clear"></div>
+						</div>
+						<div class="formSubmit"><input type="submit" value="回复" class="redB" /></div>
+						<div class="clear"></div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</fieldset>
-		<input type="hidden" name="invitationMessage" id="invitationMessage"/>
 	</form>
     
     <!-- Footer line -->
@@ -134,76 +136,73 @@
 
 <div class="clear"></div>
 <script>
-	var E = window.wangEditor;
-	var editor = new E('#editor');
-	// 自定义菜单配置
-    editor.customConfig.menus = [
-        'head',// 标题
-        'bold',// 加粗
-        'fontSize',//字号
-        'fontName', //字体
-        'italic',//倾斜
-        'underline',//下划线
-        'strikeThrough',  // 删除线
-        'foreColor',  // 文字颜色
-        'backColor',  // 背景颜色
-        'justify',  // 对齐方式
-        'emoticon',  // 表情
-        'image',  // 插入图片
-        'undo',  // 撤销
-        'redo'  // 重复
-    ];
- 	// 自定义配置颜色（字体颜色、背景色）
-    editor.customConfig.colors = [
-        '#000000',
-        '#eeece0',
-        '#1c487f',
-        '#4d80bf',
-        '#c24f4a',
-        '#8baa4a',
-        '#7b5ba1',
-        '#46acc8',
-        '#f9963b'
-    ];
-    // 自定义字体
-    editor.customConfig.fontNames = [
-        '宋体',
-        '黑体',
-        '华文新魏',
-        '微软雅黑',
-        'Arial',
-        'Tahoma',
-        'Verdana'
-    ];
- 	// 关闭粘贴样式的过滤
-    editor.customConfig.pasteFilterStyle = true;
-    // 忽略粘贴内容中的图片
-    editor.customConfig.pasteIgnoreImg = true;
- 	// 上传图片到服务器
-    editor.customConfig.uploadImgServer = '${pageContext.request.contextPath}/upload';
- 	// 隐藏“网络图片”tab
-    editor.customConfig.showLinkImg = false;
- 	// 将图片大小限制为 2M
-    editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024;
-	// 限制一次最多上传 5 张图片
-	editor.customConfig.uploadImgMaxLength = 5;
- 	// 监听函数，可使用监听函数在上传图片的不同阶段做相应处理
- 	editor.customConfig.uploadImgHooks = {
-    	customInsert: function (insertImg, result, editor) {
-        	for(var i in result){
-        		insertImg('${pageContext.request.contextPath}/static/file/'+result[i]);
-        	}
+var E = window.wangEditor;
+var editor = new E('#editor');
+// 自定义菜单配置
+editor.customConfig.menus = [
+    'bold',// 加粗
+    'fontSize',//字号
+    'fontName', //字体
+    'italic',//倾斜
+    'underline',//下划线
+    'strikeThrough',  // 删除线
+    'foreColor',  // 文字颜色
+    'backColor',  // 背景颜色
+    'emoticon',  // 表情
+    'image'  // 插入图片
+];
+	// 自定义配置颜色（字体颜色、背景色）
+editor.customConfig.colors = [
+    '#000000',
+    '#eeece0',
+    '#1c487f',
+    '#4d80bf',
+    '#c24f4a',
+    '#8baa4a',
+    '#7b5ba1',
+    '#46acc8',
+    '#f9963b'
+];
+// 自定义字体
+editor.customConfig.fontNames = [
+    '宋体',
+    '黑体',
+    '华文新魏',
+    '微软雅黑',
+    'Arial',
+    'Tahoma',
+    'Verdana'
+];
+// 关闭粘贴样式的过滤
+editor.customConfig.pasteFilterStyle = true;
+// 忽略粘贴内容中的图片
+editor.customConfig.pasteIgnoreImg = true;
+	// 上传图片到服务器
+editor.customConfig.uploadImgServer = '${pageContext.request.contextPath}/upload';
+	// 隐藏“网络图片”tab
+editor.customConfig.showLinkImg = false;
+	// 将图片大小限制为 2M
+editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024;
+// 限制一次最多上传 5 张图片
+editor.customConfig.uploadImgMaxLength = 5;
+	// 监听函数，可使用监听函数在上传图片的不同阶段做相应处理
+	editor.customConfig.uploadImgHooks = {
+	customInsert: function (insertImg, result, editor) {
+    	for(var i in result){
+    		insertImg('${pageContext.request.contextPath}/static/file/'+result[i]);
     	}
-    }
-	editor.create();
- // 下面的script用于处理提交 
- $(function(){
-	 $("form").submit(function(){
-		 // 把富文本框中的内容作为id为invitationMessage的值
-		 $("#invitationMessage").val(editor.txt.html());
-	 });
+	}
+}
+editor.create();
+// 下面的script用于处理提交 
+$(function(){
+ $("form").submit(function(){
+	 // 把富文本框中的内容作为id为invitationMessage的值
+	 $("#ansMessage").val(editor.txt.html());
  });
+});
 </script>
 </body>
 </html>
+
     

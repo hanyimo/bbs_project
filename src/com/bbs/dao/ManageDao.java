@@ -1,10 +1,11 @@
 package com.bbs.dao;
 
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.bbs.pojo.Invitation;
@@ -116,29 +117,101 @@ public class ManageDao {
 		return 0;
 	}
 	/**
-	 * 添加新的帖子
-	 * @param invitation
-	 * @return @return 成功返回1 失败返回0
+	 * 获取所有帖子的列表
+	 * @return 帖子列表
 	 */
-	public int addInvitation(Invitation invitation) {
+	public List<Invitation> listInvitations(){
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		// 保存所有帖子的列表
+		List<Invitation> invitations = new ArrayList<>();
 		try {
 			con = BaseDao.getCon();
-			String sql = "insert into bbs_invitation(invitationId,invitationTitle, invitationMessage,"
-					+ "userId,plateId,categoryId,isPass,isEnable,isCream,invitationCreate,"
-					+ "invitationModify) values(?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "select * from bbs_invitation order"
+					+ " by isPass asc,invitationModify desc";
 			ps = con.prepareStatement(sql);
-			BaseDao.update(ps,new Object[] {invitation.getInvitationId(),invitation.getInvitationTitle(),
-					invitation.getInvitationMessage(),invitation.getUserId(),invitation.getPlateId()
-					,invitation.getCategoryId(),invitation.getIsPass(),invitation.getIsEnable(),
-					invitation.getIsCream(),invitation.getInvitationCreate(),invitation.getInvitationModify()});
-			
+			rs = BaseDao.query(ps,null);
+			// 格式化日期时间
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			// 逐行把信息读取出来，放入列表中
+			while(rs.next()) {
+				invitations.add(
+					new Invitation(
+							rs.getString("invitationId"),
+							URLDecoder.decode(rs.getString("invitationTitle"),"UTF-8"),
+							URLDecoder.decode(rs.getString("invitationMessage"),"UTF-8"),
+							rs.getString("userId"),rs.getInt("plateId"),
+							rs.getInt("categoryId"),rs.getInt("isPass"),
+							rs.getInt("isEnable"),rs.getInt("isCream"),
+							sdf.parse(rs.getString("invitationCreate")),
+							sdf.parse(rs.getString("invitationModify")))
+				);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			BaseDao.close(con, ps, rs);
+		}
+		return invitations;
+	}
+	/**
+	 * 根据帖子id查询帖子
+	 * @param invitationId--帖子id
+	 * @return 成功返回找到的帖子对象，失败返回null
+	 */
+	public Invitation findInvitationById(String invitationId) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Invitation invitation = null;
+		try {
+			con = BaseDao.getCon();
+			String sql = "select * from bbs_invitation where invitationId=?";
+			ps = con.prepareStatement(sql);
+			rs = BaseDao.query(ps,new Object[] {invitationId});
+			// 格式化日期时间
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			// 逐行把信息读取出来，放入列表中
+			if(rs.next()) {
+				invitation = new Invitation(
+							rs.getString("invitationId"),
+							URLDecoder.decode(rs.getString("invitationTitle"),"UTF-8"),
+							URLDecoder.decode(rs.getString("invitationMessage"),"UTF-8"),
+							rs.getString("userId"),rs.getInt("plateId"),
+							rs.getInt("categoryId"),rs.getInt("isPass"),
+							rs.getInt("isEnable"),rs.getInt("isCream"),
+							sdf.parse(rs.getString("invitationCreate")),
+							sdf.parse(rs.getString("invitationModify"))
+				);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			BaseDao.close(con, ps, rs);
+		}
+		return invitation;
+	}
+	/**
+	 * 修改帖子的权限
+	 * @param invitation--帖子
+	 * @return 1-成功 0-失败
+	 */
+	public int alterInvitationPower(Invitation invitation) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = BaseDao.getCon();
+			String sql = "update bbs_invitation set isPass=?"
+					+ " where invitationId=?";
+			ps = con.prepareStatement(sql);
+			return BaseDao.update(ps, new Object[] {
+				invitation.getIsPass(),invitation.getInvitationId()
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			BaseDao.close(con, ps, null);
 		}
 		return 0;
 	}

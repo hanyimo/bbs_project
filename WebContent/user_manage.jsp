@@ -92,7 +92,7 @@
             	<c:if test="${curUser.isPass != 0 }">
             		<td class="center">已审核</td>
             	</c:if>
-            	<td class="center">Win 95+</td>
+            	<td class="center"><a href="#">降级</a></td>
             	<td class="center">4</td>
             </tr>
             </c:forEach>

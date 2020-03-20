@@ -1,6 +1,7 @@
 package com.bbs.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,21 +10,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bbs.pojo.Plate;
-import com.bbs.service.ManageService;
+import com.alibaba.fastjson.JSON;
+import com.bbs.pojo.ClientInvitation;
+import com.bbs.pojo.Invitation;
+import com.bbs.service.ClientService;
 
-@WebServlet("/send_invitation_access")
-public class SendInvitationAccess extends HttpServlet {
+@WebServlet("/index_action")
+public class IndexAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ManageService manageService = new ManageService();
+	private ClientService clientService = new ClientService();
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		// 获取所有版块的列表
-		List<Plate> plates = manageService.listPlates();
-		// 把plates的值作为request的属性
-		request.setAttribute("plates", plates);
-		request.getRequestDispatcher("send_invitation.jsp").forward(request, response);
+		response.setContentType("appliction/json");
+		// 获取符合要求的帖子
+		List<ClientInvitation> invitations = clientService.listInvitations(null);
+		// 把invitations以JSON方式输出给前端
+		PrintWriter out = response.getWriter();
+		out.write(JSON.toJSONString(invitations));
+		return;
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

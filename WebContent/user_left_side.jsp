@@ -1,5 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <div id="leftSide">
-    <div class="logo"><a href="${pageContext.request.contextPath}/index.jsp"><img src="${pageContext.request.contextPath}/static/images/logo.png" alt="" /></a></div>
+    <div class="logo"><a href="${pageContext.request.contextPath}/index"><img src="${pageContext.request.contextPath}/static/images/logo.png" alt="" /></a></div>
     
     <div class="sidebarSep mt0"></div>
     
@@ -27,10 +29,11 @@ $(function(){
 			var content = '';
 			for(var item in msg){
 				content += '<li class="dash">'
-					+'<a href="index.html?plateId='+msg[item].plateId+'"'
+					+'<a href="${pageContext.request.contextPath}/index?plateId='+msg[item].plateId+'"'
 					+' title="" class="active">'
 					+'<span>'+msg[item].plateTitle+'</span></a></li>';
 			}
+			$("ul[class='nav']").append('<li class="dash"><a href="${pageContext.request.contextPath}/index" title="" class="active"><span>全部</span></a></li>');
 			$("ul[class='nav']").append(content);
 		},
 		error: function(XMLHttpRequest,textStatus,errorThrown) {

@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>板块管理</title>
+<title>帖子管理</title>
 <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" type="text/css" />
 
 <script src="${pageContext.request.contextPath}/static/js/jquery.min.js"></script>
@@ -70,26 +71,58 @@
 
 	<%@ include file="admin_top_nav.jsp" %>
     
-    <!-- Form -->
-	<form action="" class="form">
-		<fieldset>
-			<div class="widget">
- 				<div class="title"><img src="${pageContext.request.contextPath}/static/images/icons/dark/list.png" alt="" class="titleIcon" /><h6>新建版块</h6></div>
-  				<div class="formRow">
-					<label>版块标题:</label>
-					<div class="formRight"><input type="text" name="plateTitle" value="" required="required"/></div>
-       				<div class="clear"></div>
-   				</div>
-   				<div class="formRow">
-     				<label>版块描述:</label>
-              		<div class="formRight"><textarea rows="8" cols="" name="plateMessage" required="required"></textarea></div>
-           			<div class="clear"></div>
-        		</div>
-    			<div class="formSubmit"><input type="submit" value="添加版块" class="redB" /></div>
-       			<div class="clear"></div>
-   			</div>
-   		</fieldset>
-   	</form>
+	<!-- Dynamic table -->
+	<div class="widget">
+ 		<div class="title"><img src="images/icons/dark/full2.png" alt="" class="titleIcon" /><h6>帖子管理</h6></div>                          
+		<table cellpadding="0" cellspacing="0" border="0" class="display dTable">
+            <thead>
+            <tr>
+            <th>账户</th>
+            <th>标题</th>
+            <th>审核</th>
+            <th>屏蔽</th>
+            <th>精华</th>
+            <th>修改时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            	<c:forEach items="${invitations }" var="inv">
+            		<tr class="gradeA">
+            		<td class="center">${inv.userId }</td>
+            		<td class="center"><a href="${pageContext.request.contextPath}/invitation_power?invitationId=${inv.invitationId }">${inv.invitationTitle }</a></td>
+            		<c:choose>
+            			<c:when test="${inv.isPass == 0 }">
+            				<td class="center">待审核</td>
+            			</c:when>
+            			<c:when test="${inv.isPass == 1 }">
+            				<td class="center" style="color:green;">已通过</td>
+            			</c:when>
+            			<c:otherwise>
+            				<td class="center" style="color:red;">未通过</td>
+            			</c:otherwise>
+            		</c:choose>
+					<c:choose>
+						<c:when test="${inv.isEnable == 1 }">
+							<td class="center" style="color:red;">已屏蔽</td>
+						</c:when>
+						<c:otherwise>
+							<td class="center">&nbsp;</td>
+						</c:otherwise>
+					</c:choose>
+					<c:choose>
+						<c:when test="${inv.isCream == 1 }">
+							<td class="center" style="color:red;">精华</td>
+						</c:when>
+						<c:otherwise>
+							<td class="center">&nbsp;</td>
+						</c:otherwise>
+					</c:choose>
+            		<td class="center"><fmt:formatDate value="${inv.invitationModify }" pattern="yyyy-MM-dd HH-mm-ss"/></td>
+            		</tr>
+            	</c:forEach>
+            </tbody>
+   		</table>  
+	</div>
     
     <!-- Footer line -->
     <div id="footer">
@@ -99,84 +132,6 @@
 </div>
 
 <div class="clear"></div>
-<script>
-// 使用Ajax实现添加新版块功能
-$(function(){
-	$("form").submit(function(){
-		// 发送ajax请求
-		$.ajax({
-			type: "POST",
-			url: "${pageContext.request.contextPath}/add_plate",
-			data: $("form").serialize(),
-			success: function(msg){
-				var content = '';
-				content += '<div class="widget">'
-					+'<div class="title">'
-					+'<h6>'+msg.plateTitle+'</h6>'
-					+'<div class="textC" style="float:right;margin:3px 5px 0px 0px;">'
-					+'<a href="plate_alter.jsp?plateId='+msg.plateId+'&plateTitle='+msg.plateTitle+'&plateMessage='+msg.plateMessage+'" title="" class="button greenB" style="margin-right:5px;"><span>修改版块</span></a>'
-					+'<a href="#" plateid="'+msg.plateId+'" onclick="deletePlate(this,event)" title="" class="button redB"><span>删除版块</span></a>'
-					+'</div>'
-					+'<div class="clear"></div>'
-					+'</div>'
-					+'<p>'+msg.plateMessage+'</p>'
-					+'</div>';
-				$("form").after(content);
-			},
-			error: function(XMLHttpRequest,textStatus,errorThrown) {
-			    alert(errorThrown);
-			}
-		});
-		// 不提交到后台
-		return false;
-	});
-});
-// 使用Ajax实现加载页面获取到所有的版块信息
-$(function(){
-	// 发送ajax请求，获取到所有版块信息
-	$.ajax({
-		type: "POST",
-		url: "${pageContext.request.contextPath}/list_plates",
-		success: function(msg){
-			var content = '';
-			for(var item in msg){
-				content += '<div class="widget">'
-					+'<div class="title">'
-					+'<h6>'+msg[item].plateTitle+'</h6>'
-					+'<div class="textC" style="float:right;margin:3px 5px 0px 0px;">'
-					+'<a href="plate_alter.jsp?plateId='+msg[item].plateId+'&plateTitle='+msg[item].plateTitle+'&plateMessage='+msg[item].plateMessage+'" title="" class="button greenB" style="margin-right:5px;"><span>修改版块</span></a>'
-	 				+'<a href="#" plateid="'+msg[item].plateId+'" onclick="deletePlate(this,event)" title="" class="button redB"><span>删除版块</span></a>'
-					+'</div>'
-					+'<div class="clear"></div>'
-					+'</div>'
-					+'<p>'+msg[item].plateMessage+'</p>'
-					+'</div>';
-			}
-			$("form").after(content);
-		},
-		error: function(XMLHttpRequest,textStatus,errorThrown) {
-		    alert(errorThrown);
-		}
-	});
-});
-// 实现删除版块功能
-function deletePlate(that,event){
-	event.preventDefault();
-	// 发送Ajax请求
-	$.ajax({
-		type: "POST",
-		url: "${pageContext.request.contextPath}/delete_plate",
-		data: {plateId:$(that).attr("plateid")},
-		success: function(msg){
-			// 移除掉这块
-			$(that).parents("div[class='widget']").remove();
-		},
-		error: function(XMLHttpRequest,textStatus,errorThrown) {
-		    alert(errorThrown);
-		}
-	});
-}
-</script>
 </body>
 </html>
 

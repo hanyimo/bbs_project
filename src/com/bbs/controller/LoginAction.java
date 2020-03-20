@@ -40,7 +40,7 @@ public class LoginAction extends HttpServlet {
 			return;
 		}
 		else {// 一般用户
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("/bbs_project/index");
 			return;
 		}
 	}
